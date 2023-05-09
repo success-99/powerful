@@ -1,0 +1,20 @@
+{% extends "blog/base.html"%}
+{% block title %} List View {% endblock%}
+
+{% block content%}
+
+<h1> List View</h1>
+    {% for post in posts %}
+        <h2>
+            <a href="{% url 'blog:post_detail' post.id %}">
+<!--            <a href="{{ post.get_absolute_url }}">-->
+
+                {{post.title}}
+            </a>
+        </h2>
+        <p>
+            Published {{post.author}}
+        </p>
+        {{post.body | truncatewords:1 | linebreaks}}
+    {% endfor %}
+{% endblock %}
