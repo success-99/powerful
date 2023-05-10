@@ -17,7 +17,7 @@ class Post(models.Model):
         PUBLISHED = 'PB', 'Published'
 
     title = models.CharField(max_length=200)
-    slug = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200,unique_for_date='publish')
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='blog_posts')
     body = models.TextField()
