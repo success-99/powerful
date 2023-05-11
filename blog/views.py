@@ -3,6 +3,7 @@ from .models import Post
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
 
+
 # Create your views here.
 
 
@@ -11,6 +12,7 @@ class PostListView(ListView):
     context_object_name = 'posts'
     paginate_by = 3
     template_name = 'blog/post/list.html'
+
 
 # def post_list(request):
 #     posts = Post.published.all()
