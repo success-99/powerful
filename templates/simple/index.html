@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bosh sahifa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+<h1>Welcome</h1>
+   {% for book in books %}
+<h2>    <a href="{% url 'simple:detail' book.pk %}">{{book.title}} </a><br>
+</h2>
+
+{% endfor%}
+        {% block content%}
+
+        {% endblock content %}
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends 'simple/index.html' %}
+{% block content %}
+
+    <div class="post-entry">
+        <h2>{{ posts.title }}</h2>
+    <h4>{{ posts.summary }}</h4>
+    <h4>{{ posts.isbn }}</h4>
+{% for author in authors %}
+    {{ author.name }}
+    {% endfor %}
+    </div>
+<p><a href="{% url 'simple:create' %}">Post qo'shish</a></p>
+
+<p><a href="{% url 'simple:update' posts.pk %}">Postni tahrirlash</a></p>
+<p><a href="{% url 'simple:delete' posts.pk %}">Postni o'chirish</a></p>
+
+{% endblock content %}
