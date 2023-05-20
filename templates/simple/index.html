@@ -12,6 +12,7 @@
 <h1>Welcome</h1>
    {% for book in books %}
 <h2>    <a href="{% url 'simple:detail' book.pk %}">{{book.title}} </a><br>
+{{ book.author }}
 </h2>
 
 {% endfor%}

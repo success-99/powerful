@@ -6,12 +6,12 @@ from .forms import BookForm,BookUpdateForm
 def list_view(request):
     books = Book.objects.all()
     authors = Author.objects.all()
-    return render(request, 'simple/index.html', { 'books': books, 'authors': authors })
+    print(authors)
+    return render(request, 'simple/index.html', {'books': books})
 
 def post_detail(request, pk):
     books = Book.objects.get(id=pk)
     authors = books.author.all()
-    print(authors)
     return render(request,'simple/list.html',{'posts':books, 'authors': authors })
 
 def create(request):
