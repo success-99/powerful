@@ -7,4 +7,5 @@ urlpatterns = [
     path('post/new/', create, name='create'),
     path('', list_view, name='index'),
     path('post/<int:pk>/',post_detail, name='detail'),
+
 ]
