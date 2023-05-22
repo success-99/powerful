@@ -8,4 +8,5 @@ urlpatterns = [
     path('', list_view, name='index'),
     path('post/<int:pk>/',post_detail, name='detail'),
 
+
 ]
