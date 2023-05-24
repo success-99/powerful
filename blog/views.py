@@ -6,7 +6,7 @@ from .forms import EmailPostForm,CommentForm,UserRegistrationForm,LoginForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate,login
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -101,7 +101,7 @@ def user_login(request):
     else:
         form = LoginForm()
         return render(request,'account/login.html',{'form':form })
-
+@login_required(login_url='blog:user_login')
 def dashboard(request):
     user = request.user
     context={
