@@ -3,8 +3,9 @@
 {% block content %}
  <h1>Saytga kirish uchun login qiling!</h1>
  <form method="post">
-     {{ user_form.as_p }}
-     {% csrf_token %}
+      {% csrf_token %}
+
+     {{ form.as_p }}
      <input type="submit" value="Kirish">
  </form>
 

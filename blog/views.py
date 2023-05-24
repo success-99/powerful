@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Post
 from django.shortcuts import get_object_or_404,HttpResponse
 from django.views.generic import ListView
@@ -93,8 +93,18 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponse("Muvaffaqatli login qildingiz!")
+                    return redirect('blog:post_list')
                 else:
                     return HttpResponse("Sizning hisobingiz faol emas!")
+            else:
+                return HttpResponse('login va parolda hatolik bor!')
+    else:
+        form = LoginForm()
+        return render(request,'account/login.html',{'form':form })
 
-
+def dashboard(request):
+    user = request.user
+    context={
+        'user': user
+    }
+    return render(request,'account/dashboard.html',context=context)
