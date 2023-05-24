@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "blog/base.html" %}
+{% block title %}Saytga kirish!{% endblock %}
+{% block content %}
+ <h1>Saytga kirish uchun login qiling!</h1>
+ <form method="post">
+     {{ user_form.as_p }}
+     {% csrf_token %}
+     <input type="submit" value="Kirish">
+ </form>
 
-</body>
-</html>
+{% endblock %}

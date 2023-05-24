@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from .models import Post
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404,HttpResponse
 from django.views.generic import ListView
-from .forms import EmailPostForm,CommentForm,UserRegistrationForm
+from .forms import EmailPostForm,CommentForm,UserRegistrationForm,LoginForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
-
+from django.contrib.auth import authenticate,login
 
 # Create your views here.
 
@@ -79,3 +79,22 @@ def user_register(request):
     else:
         user_form = UserRegistrationForm()
         return render(request,'account/register.html',{'user_form':user_form})
+
+
+def user_login(request):
+    if request.method=='POST':
+        form_login = LoginForm(request.POST)
+        if form_login.is_valid():
+            data = form_login.cleaned_data
+            user = authenticate(request,
+                                username=data['username'],
+                                password=data['password']
+                                )
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponse("Muvaffaqatli login qildingiz!")
+                else:
+                    return HttpResponse("Sizning hisobingiz faol emas!")
+
+

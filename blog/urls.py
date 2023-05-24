@@ -10,5 +10,5 @@ urlpatterns = [
     path('<int:post_id>/share/', post_share, name='post_share'),
     path('<int:post_id>/comment/',post_comment , name='post_comment'),
     path('post/register/', user_register, name='user_register'),
-    path('post/login/', user_login, name='user_login'),
+    # path('post/login/', user_login, name='user_login'),
 ]
