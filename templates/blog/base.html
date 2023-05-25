@@ -1,5 +1,9 @@
 {% load static %}
-
+<style>
+    .ml{
+        margin-left: 20px;
+    }
+</style>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +14,9 @@
 </head>
 <body>
 <h1> <a href="{% url 'blog:post_list'%}"> Welcome </a></h1>
+<div class="ml">
 {% block content %}
 {% endblock%}
-
+</div>
 </body>
 </html>

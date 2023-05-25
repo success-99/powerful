@@ -9,18 +9,17 @@ from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+# class PostListView(ListView):
+#     queryset = Post.published.all()
+#     context_object_name = 'posts'
+#     paginate_by = 2
+#     template_name = 'blog/post/list.html'
 
-class PostListView(ListView):
-    queryset = Post.published.all()
-    context_object_name = 'posts'
-    paginate_by = 2
-    template_name = 'blog/post/list.html'
+@login_required(login_url='blog:user_login')
+def post_list(request):
+    posts = Post.published.all()
+    return render(request, 'blog/post/list.html', {'posts': posts})
 
-
-# def post_list(request):
-#     posts = Post.published.all()
-#     return render(request, 'blog/post/list.html', {'posts': posts})
-#
 
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, status=Post.Status.PUBLISHED,
@@ -108,3 +107,8 @@ def dashboard(request):
         'user': user
     }
     return render(request,'account/dashboard.html',context=context)
+
+def delete(request, pk):
+    delete = get_object_or_404(Post, id=pk)
+    delete.delete()
+    return redirect('blog:profile')
