@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comment
+from .models import Comment, Post
 from django.contrib.auth.models import User
 
 class UserRegistrationForm(forms.ModelForm):
@@ -8,7 +8,7 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name','last_name','email','password','password_2']
+        fields = ['username','first_name','last_name','email','password','password_2']
 
     def clean_password_2(self):
         data = self.cleaned_data
@@ -34,3 +34,7 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['name', 'email', 'body']
 
+class PostAddForm(forms.ModelForm):
+    class Meta:
+        model=Post
+        fields = ['title','author','body']

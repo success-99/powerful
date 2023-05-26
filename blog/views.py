@@ -2,23 +2,38 @@ from django.shortcuts import render, redirect
 from .models import Post
 from django.shortcuts import get_object_or_404,HttpResponse
 from django.views.generic import ListView
-from .forms import EmailPostForm,CommentForm,UserRegistrationForm,LoginForm
+from .forms import EmailPostForm,CommentForm,UserRegistrationForm,LoginForm,PostAddForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 # Create your views here.
 
-# class PostListView(ListView):
-#     queryset = Post.published.all()
-#     context_object_name = 'posts'
-#     paginate_by = 2
-#     template_name = 'blog/post/list.html'
+class PostListView(ListView):
+    queryset = Post.published.all()
+    context_object_name = 'posts'
+    paginate_by = 2
+    template_name = 'blog/post/list.html'
+
+# @login_required(login_url='blog:user_login')
+# def post_list(request):
+#     posts = Post.published.all()
+#     return render(request, 'blog/post/list.html', {'posts': posts})
 
 @login_required(login_url='blog:user_login')
-def post_list(request):
-    posts = Post.published.all()
-    return render(request, 'blog/post/list.html', {'posts': posts})
+def post_add(request):
+    if request.method == "GET":
+        form = PostAddForm()
+        return render(request, 'blog/post/post_add.html', {'form': form})
+    elif request.method == "POST":
+        form = PostAddForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Muvaffaqiyatli qo'shildi!")
+            return redirect('blog:post_list')
+        return render(request, 'blog/post/post_add.html', {'form': form})
 
 
 def post_detail(request, year, month, day, post):
@@ -53,8 +68,9 @@ def post_share(request, post_id):
     return render(request, 'blog/post/share.html', {'post': post,
                                                     'form': form,
                                                     'sent': sent})
+
 @require_POST
-def post_comment(request,post_id):
+def post_comment_add(request,post_id):
     post = get_object_or_404(Post,id=post_id,status=Post.Status.PUBLISHED)
     comment = None
     form = CommentForm(data=request.POST)
@@ -100,15 +116,23 @@ def user_login(request):
     else:
         form = LoginForm()
         return render(request,'account/login.html',{'form':form })
+
+
 @login_required(login_url='blog:user_login')
-def dashboard(request):
+def profile(request):
     user = request.user
     context={
         'user': user
     }
-    return render(request,'account/dashboard.html',context=context)
+    return render(request,'account/profile.html',context=context)
 
-def delete(request, pk):
+def user_logout(request):
+    if request.user.is_authenticated:
+        logout(request)
+        return redirect('blog:post_list')
+    else:
+        return HttpResponse("Foydalanuvchi avtorizatsiyadan o'tmagan.")
+def post_delete(request, pk):
     delete = get_object_or_404(Post, id=pk)
     delete.delete()
     return redirect('blog:profile')

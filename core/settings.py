@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #package
+
+    'crispy_forms',
+    'bootstrap5',
     'rest_framework',
 
     # local
@@ -48,7 +51,7 @@ INSTALLED_APPS = [
     'compiler',
 
 ]
-
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

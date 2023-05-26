@@ -16,6 +16,7 @@
         </p>
         {{post.body | truncatewords:1 | linebreaks}}
     {% endfor %}
+{#<p><a href="{% url 'bl' %}">Post qo'shish</a></p>#}
 
 <div class="pagination">
     <span class="step-links">
@@ -23,6 +24,7 @@
             <a href="?page=1">&laquo; first</a>
             <a href="?page={{ page_obj.previous_page_number }}">previous</a>
         {% endif %}
+
 
         <span class="current">
             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.

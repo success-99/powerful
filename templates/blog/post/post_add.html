@@ -1,0 +1,21 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+  Post qo'shish
+{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-6 mt-5 ">
+            <h2>Post qo'shish</h2>
+            <form  method="post" enctype="multipart/form-data" >{% csrf_token %}
+                {{form.as_p}}
+                <button type="submit" class="btn btn-primary" >Submit</button>
+                <a class="btn btn-secondary" href="{% url 'blog:post_list'  %}"> Back home</a>
+            </form>
+        </div>
+    </div>
+  </div>
+{% endblock content %}
