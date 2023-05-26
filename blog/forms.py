@@ -2,6 +2,11 @@ from django import forms
 from .models import Comment, Post
 from django.contrib.auth.models import User
 
+
+STATUS_CHOICES = (
+    ('DF', 'Draft'),
+    ('PB', 'Published'),
+)
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(label='Parol',widget=forms.PasswordInput)
     password_2 = forms.CharField(label='Parolni takrorlang',widget=forms.PasswordInput)
@@ -34,7 +39,9 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['name', 'email', 'body']
 
+
 class PostAddForm(forms.ModelForm):
+    status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.RadioSelect)
     class Meta:
         model=Post
-        fields = ['title','author','body']
+        fields = ['title','author','body','slug','status']
