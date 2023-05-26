@@ -132,7 +132,25 @@ def user_logout(request):
         return redirect('blog:post_list')
     else:
         return HttpResponse("Foydalanuvchi avtorizatsiyadan o'tmagan.")
+
 def post_delete(request, pk):
     delete = get_object_or_404(Post, id=pk)
     delete.delete()
-    return redirect('blog:profile')
+    return redirect('blog:post_list')
+
+def update(request, pk):
+    if request.method=='POST':
+        book_up = get_object_or_404(Post, id=pk)
+        form = BookUpdateForm(request.POST, instance=book_up)
+        if form.is_valid():
+            instance= form.save(commit=False)
+            instance.save()
+            return redirect('simple:index')
+        context = {
+            "form": form,
+        }
+        return render(request, 'simple/update.html', context)
+    else:
+        books = get_object_or_404(Book, id=pk)
+        form = BookUpdateForm(instance=books)
+        return render(request, 'simple/update.html', {'form':form})

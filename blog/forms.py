@@ -45,3 +45,8 @@ class PostAddForm(forms.ModelForm):
     class Meta:
         model=Post
         fields = ['title','author','body','slug','status']
+
+class PostUpForm(forms.ModelForm):
+    class Meta:
+        model=Post
+        fields = ['title','body','slug']
