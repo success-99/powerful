@@ -5,20 +5,19 @@
 {% block content%}
 
 <h1> Detail View </h1>
-        <h2>
-            {{post.title}}
-        </h2>
-        <p>
-            Published {{post.publish}} by {{post.author}}
-        </p>
-        {{post.body}}
- <p>
-<p><a href="{% url 'blog:post_delete' post.pk %}">Postni o'chirish</a></p>
+    <div class="border border-primary">
+        <h2>{{post.title}}</h2>
+        <p>Published {{post.publish}} by {{post.author}}</p>
+        <p>{{post.body}}</p></div><br><br>
 
-     <a href="{% url 'blog:post_share' post.id %}">
+
+    <p><a class="btn btn-success" href="{% url 'blog:post_update' post.pk %}">Postni yangilash</a></p>
+    <p><a class="btn btn-danger" href="{% url 'blog:post_delete' post.pk %}">Postni o'chirish</a></p>
+
+     <a class="btn btn-warning" href="{% url 'blog:post_share' post.id %}">
      Share this post
  </a>
- </p>
+
     {% with comments.count as total_comments %}
         <h2>
         {{ total_comments }} comment{{ total_comments|pluralize }}
@@ -32,6 +31,7 @@
         </p>
             {{ comment.body|linebreaks }}
         </div>
+        <hr>
         {% empty %}
         <p>Kommentlar mavjud emas.</p>
         {% endfor %}

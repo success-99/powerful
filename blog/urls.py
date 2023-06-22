@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import post_detail, post_share,post_comment_add,user_register,user_login,profile,post_delete,user_logout,post_add
+from .views import post_detail, post_share,post_comment_add,user_register,user_login,profile,post_delete,user_logout,post_add,post_update
 from .views import PostListView
 
 app_name = 'blog'
@@ -13,6 +13,7 @@ urlpatterns = [
     path('login/',user_login, name='user_login'),
     path('logout/', user_logout, name='user_logout'),
     path('post-add/', post_add, name='post_add'),
+    path('post/<int:post_id>/update', post_update, name='post_update'),
 
     path('profile/',profile, name='profile'),
     path('post/<int:pk>/delete',post_delete, name='post_delete'),

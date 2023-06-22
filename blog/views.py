@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect
 from .models import Post
 from django.shortcuts import get_object_or_404,HttpResponse
 from django.views.generic import ListView
-from .forms import EmailPostForm,CommentForm,UserRegistrationForm,LoginForm,PostAddForm
+from .forms import EmailPostForm,CommentForm,UserRegistrationForm,LoginForm,PostAddForm,PostUpForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.safestring import mark_safe
 
 # Create your views here.
 
@@ -108,6 +109,7 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    messages.success(request, "Muvaffaqiyatli kirdingiz!")
                     return redirect('blog:post_list')
                 else:
                     return HttpResponse("Sizning hisobingiz faol emas!")
@@ -129,29 +131,34 @@ def profile(request):
 def user_logout(request):
     if request.user.is_authenticated:
         logout(request)
-        messages.success(request, "Muvaffaqiyatli qo'shildi!")
+        messages.success(request, mark_safe('<strong style="color: red;">Muvaffaqiyatli chiqdingiz!</strong>'))
         return redirect('blog:post_list')
     else:
         return HttpResponse("Foydalanuvchi avtorizatsiyadan o'tmagan.")
 
 def post_delete(request, pk):
     delete = get_object_or_404(Post, id=pk)
-    delete.delete()
-    return redirect('blog:post_list')
+    if request.user == delete.author:
+        delete.delete()
+        return redirect('blog:post_list')
+    else:
+        messages.error(request, mark_safe('<strong style="color: red;">Siz bu postni o\'chira olmaysiz!</strong>'))
+        return redirect('blog:post_list')
 
-# def update(request, pk):
-#     if request.method=='POST':
-#         book_up = get_object_or_404(Post, id=pk)
-#         form = BookUpdateForm(request.POST, instance=book_up)
-#         if form.is_valid():
-#             instance= form.save(commit=False)
-#             instance.save()
-#             return redirect('simple:index')
-#         context = {
-#             "form": form,
-#         }
-#         return render(request, 'simple/update.html', context)
-#     else:
-#         books = get_object_or_404(Book, id=pk)
-#         form = BookUpdateForm(instance=books)
-#         return render(request, 'simple/update.html', {'form':form})
+@login_required(login_url='blog:user_login')
+def post_update(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user == post.author:
+        if request.method == 'GET':
+            form = PostUpForm(instance=post)
+            return render(request, 'blog/post/post_update.html', {'form': form, 'pt': post})
+        elif request.method == 'POST':
+            form = PostUpForm(instance=post, data=request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Muvaffaqiyatli yangilandi!")
+                return redirect('blog:post_list')
+            return render(request, 'blog/post/post_update.html', {'form': form, 'pt': post})
+    else:
+        messages.error(request, mark_safe('<strong style="color: red;">Siz bu postni yangilay olmaysiz!</strong>'))
+        return redirect('blog:post_list')
